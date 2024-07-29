@@ -1,0 +1,59 @@
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+
+local tweenInfo = TweenInfo.new(
+    5,
+    Enum.EasingStyle.Sine,
+    Enum.EasingDirection.InOut,
+    0,
+    false,
+    0
+)
+
+local function createTweens()
+    local lightingGoals = {
+        ClockTime = 16.5,
+        Ambient = Color3.fromRGB(255, 204, 102),
+        OutdoorAmbient = Color3.fromRGB(255, 204, 102),
+        FogColor = Color3.fromRGB(255, 204, 102),
+        ColorShift_Top = Color3.fromRGB(255, 204, 102),
+        ColorShift_Bottom = Color3.fromRGB(255, 204, 102)
+    }
+
+    local lightingTween = TweenService:Create(Lighting, tweenInfo, lightingGoals)
+    lightingTween:Play()
+
+    local light = Instance.new("PointLight")
+    light.Color = Color3.fromRGB(255, 204, 102)
+    light.Brightness = 0
+    light.Range = 0
+    light.Position = Vector3.new(0, 100, 0)
+    light.Parent = Workspace
+
+    local lightGoals = {
+        Brightness = 10,
+        Range = 1000
+    }
+
+    local lightTween = TweenService:Create(light, tweenInfo, lightGoals)
+    lightTween:Play()
+
+    local player = Players.LocalPlayer
+    if player and player.Character then
+        local character = player.Character
+        local partGoals = {
+            BrickColor = BrickColor.new(Color3.fromRGB(255, 204, 102))
+        }
+
+        for _, part in ipairs(character:GetChildren()) do
+            if part:IsA("BasePart") then
+                local partTween = TweenService:Create(part, tweenInfo, partGoals)
+                partTween:Play()
+            end
+        end
+    end
+end
+
+createTweens()
